@@ -8,6 +8,14 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a4fd6'/><text x='50' y='68' font-size='50' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'>EST</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Supabase Configuration -->
+<script>
+const SUPABASE_URL = 'https://mllgitbtlloxfnoooqqr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_WRWogXQmJMLE2vl2N7DR2w_WOO_AmJT';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
 <style>
 :root{--bg:#fff;--bg-soft:#f7f9fc;--bg-elevated:#fff;--text:#0a1e3f;--text-soft:#64748b;--border:#e2e8f0;--primary:#1a4fd6;--primary-dark:#0f3aa8;--primary-light:#e8efff;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--danger:#ef4444;--purple:#7c3aed;--teacher:#0891b2;--student:#1a4fd6;--radius:16px;--shadow-sm:0 2px 8px rgba(10,30,63,.06);--shadow:0 8px 30px rgba(10,30,63,.08);--shadow-lg:0 20px 50px rgba(10,30,63,.12);--nav-bg:rgba(255,255,255,.9)}
 [data-theme="dark"]{--bg:#0a0f1c;--bg-soft:#101828;--bg-elevated:#16203a;--text:#f1f5f9;--text-soft:#94a3b8;--border:#1e293b;--primary-light:#1e2b4a;--nav-bg:rgba(10,15,28,.9)}

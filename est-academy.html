@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EST Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#fff;--bg-soft:#f7f9fc;--bg-el:#fff;--text:#0a1e3f;--text-soft:#64748b;--border:#e2e8f0;--primary:#1a4fd6;--primary-dark:#0f3aa8;--primary-light:#e8efff;--accent:#f59e0b;--success:#10b981;--danger:#ef4444;--purple:#7c3aed;--teacher:#0891b2;--shadow:0 8px 30px rgba(10,30,63,.08);--shadow-lg:0 20px 50px rgba(10,30,63,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+header{background:var(--bg-el);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px}
+.logo-text{font-size:18px;font-weight:800}
+.logo-text span{color:var(--primary)}
+nav{display:flex;gap:20px}
+nav a{text-decoration:none;color:var(--text-soft);font-size:14px;font-weight:500}
+nav a:hover{color:var(--primary)}
+.btn{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;text-decoration:none}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg-soft)}
+.btn-teacher{background:linear-gradient(135deg,#0891b2,#06b6d4);color:#fff}
+.btn-admin{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.btn-lg{padding:14px 28px;font-size:15px;border-radius:12px}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+.btn-full{width:100%}
+.hero{padding:80px 0;background:linear-gradient(135deg,#f7f9fc,#fff)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero h1{font-size:52px;font-weight:800;line-height:1.1;letter-spacing:-2px;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--primary)}
+.hero p{font-size:17px;color:var(--text-soft);margin-bottom:28px}
+.hero-card{background:var(--bg-el);border-radius:20px;padding:28px;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
+.hero-card h3{font-size:16px;font-weight:700;margin-bottom:16px}
+.answer{padding:14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;font-size:14px}
+.answer.correct{border-color:var(--success);background:rgba(16,185,129,.08)}
+.section{padding:80px 0}
+.section-soft{background:var(--bg-soft)}
+.section-head{text-align:center;margin-bottom:48px}
+.section-tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+.section-head h2{font-size:38px;font-weight:800;letter-spacing:-1.5px;margin-bottom:12px}
+.section-head p{font-size:16px;color:var(--text-soft)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.feature{background:var(--bg-el);padding:28px;border-radius:16px;border:1px solid var(--border)}
+.feature-icon{width:48px;height:48px;border-radius:12px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.feature h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.feature p{font-size:14px;color:var(--text-soft)}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.course{background:var(--bg-el);border-radius:16px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .3s}
+.course:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.course-cover{height:140px;display:flex;align-items:flex-end;padding:20px;color:#fff;position:relative}
+.course-cover.math{background:linear-gradient(135deg,#1a4fd6,#4a7cff)}
+.course-cover.english{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.course-cover.science{background:linear-gradient(135deg,#059669,#10b981)}
+.course-cover.logic{background:linear-gradient(135deg,#ea580c,#f59e0b)}
+.course-cover h3{font-size:20px;font-weight:800}
+.course-icon{position:absolute;top:16px;right:16px;font-size:28px}
+.course-body{padding:20px}
+.course-desc{font-size:14px;color:var(--text-soft);margin-bottom:16px}
+.course-meta{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--border)}
+.course-price{font-size:20px;font-weight:800}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,15,28,.7);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:32px;position:relative;max-height:90vh;overflow-y:auto}
+.modal-lg{max-width:780px}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--bg-soft);border:none;cursor:pointer;font-size:16px}
+.modal h3{font-size:22px;font-weight:800;margin-bottom:6px}
+.modal p{font-size:14px;color:var(--text-soft);margin-bottom:20px}
+.tabs{display:flex;gap:6px;padding:4px;background:var(--bg-soft);border-radius:10px;margin-bottom:20px}
+.tab{flex:1;padding:10px;border:none;background:transparent;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-soft)}
+.tab.active{background:#fff;color:var(--text);box-shadow:0 2px 4px rgba(0,0,0,.05)}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;background:#fff;color:var(--text)}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--text);color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:500;z-index:2000;transition:transform .3s;max-width:90%}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.dashboard{position:fixed;inset:0;background:var(--bg-soft);z-index:900;overflow-y:auto;display:none}
+.dashboard.active{display:block}
+.dash-header{color:#fff;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.dash-header.student{background:linear-gradient(135deg,#1a4fd6,#4a7cff)}
+.dash-header.teacher{background:linear-gradient(135deg,#0891b2,#06b6d4)}
+.dash-header.admin{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.dash-header h2{font-size:20px;font-weight:800}
+.dash-actions{display:flex;gap:8px;flex-wrap:wrap}
+.dash-actions button{padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.dash-body{padding:32px;max-width:1300px;margin:0 auto}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;align-items:center;gap:14px}
+.stat-icon{width:48px;height:48px;border-radius:12px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:22px}
+.stat-icon.teacher{background:rgba(8,145,178,.15)}
+.stat-icon.admin{background:rgba(124,58,237,.15)}
+.stat-val{font-size:26px;font-weight:800;line-height:1}
+.stat-lbl{font-size:12px;color:var(--text-soft)}
+.dash-tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:5px;border-radius:12px;border:1px solid var(--border);overflow-x:auto}
+.dash-tab{padding:10px 18px;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-soft);white-space:nowrap}
+.dash-tab.active{background:var(--bg-soft);color:var(--text)}
+.dash-pane{display:none}
+.dash-pane.active{display:block}
+.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.panel h3{font-size:17px;font-weight:800;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+th,td{padding:12px 16px;text-align:left;font-size:13px;border-bottom:1px solid var(--border)}
+th{background:var(--bg-soft);font-weight:700;font-size:11px;text-transform:uppercase;color:var(--text-soft)}
+tr:last-child td{border-bottom:none}
+.badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase}
+.badge.pending{background:rgba(245,158,11,.15);color:var(--accent)}
+.badge.approved{background:rgba(16,185,129,.15);color:var(--success)}
+.badge.declined{background:rgba(239,68,68,.15);color:var(--danger)}
+.badge.pro{background:rgba(124,58,237,.15);color:var(--purple)}
+.badge.free{background:rgba(148,163,184,.15);color:var(--text-soft)}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.person-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;border-top:3px solid var(--primary)}
+.person-card.pending{border-top-color:var(--accent)}
+.person-card.teacher{border-top-color:var(--teacher)}
+.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;margin-bottom:12px}
+.avatar.pending{background:linear-gradient(135deg,var(--accent),#fbbf24)}
+.avatar.teacher{background:linear-gradient(135deg,var(--teacher),#06b6d4)}
+.person-card h4{font-size:16px;font-weight:700;margin-bottom:2px}
+.person-card .meta{font-size:12px;color:var(--text-soft);margin-bottom:12px}
+.card-actions{display:flex;gap:6px;margin-top:12px}
+.card-actions button{flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);background:#fff;color:var(--text-soft)}
+.card-actions button.accept{background:var(--success);color:#fff;border-color:var(--success)}
+.card-actions button.decline{background:var(--danger);color:#fff;border-color:var(--danger)}
+@media(max-width:768px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero h1{font-size:36px}.section-head h2{font-size:28px}.dash-body{padding:20px}.form-row{grid-template-columns:1fr}nav{display:none}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container header-inner">
+<a href="#" class="logo" onclick="event.preventDefault();window.scrollTo(0,0)">
+<div class="logo-mark">EST</div>
+<div class="logo-text">Academy<span>.</span></div>
+</a>
+<nav>
+<a href="#courses">Courses</a>
+<a href="#features">Features</a>
+<a href="#pricing">Pricing</a>
+</nav>
+<div>
+<button class="btn btn-ghost" onclick="openAuth()" id="signInBtn">Sign In</button>
+</div>
+</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<div class="container hero-grid">
+<div>
+<span class="section-tag">Trusted by students in Egypt</span>
+<h1>Ace the <em>EST Exam</em> with confidence.</h1>
+<p>Expert-led preparation for the American Diploma EST exam. Real practice tests, live sessions, and personalized guidance.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button class="btn btn-primary btn-lg" onclick="openAuth()">🎓 Get Started</button>
+<button class="btn btn-teacher btn-lg" onclick="openTeacherApply()">👨‍🏫 Apply as Teacher</button>
+</div>
+</div>
+<div class="hero-card">
+<h3>📝 EST Math — Practice Question</h3>
+<p style="font-size:14px;color:var(--text-soft);margin-bottom:16px">If 3x + 5 = 20, what is the value of x?</p>
+<div class="answer correct">✓ A) 5</div>
+<div class="answer">B) 3</div>
+<div class="answer">C) 7</div>
+<div class="answer">D) 15</div>
+</div>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="section section-soft" id="features">
+<div class="container">
+<div class="section-head">
+<span class="section-tag">Features</span>
+<h2>Everything you need</h2>
+<p>Complete platform for students, teachers, and administrators.</p>
+</div>
+<div class="features-grid">
+<div class="feature"><div class="feature-icon">🎓</div><h3>Student Dashboard</h3><p>Track courses, exams, grades, and progress.</p></div>
+<div class="feature"><div class="feature-icon">👨‍🏫</div><h3>Teacher Panel</h3><p>Manage students, create exams, add questions.</p></div>
+<div class="feature"><div class="feature-icon">⚙️</div><h3>Admin Control</h3><p>Approve students, set prices, manage payments.</p></div>
+<div class="feature"><div class="feature-icon">🗄️</div><h3>Live Database</h3><p>Real-time sync across all devices.</p></div>
+</div>
+</div>
+</section>
+
+<!-- COURSES -->
+<section class="section" id="courses">
+<div class="container">
+<div class="section-head">
+<span class="section-tag">Courses</span>
+<h2>Master every EST subject</h2>
+</div>
+<div class="courses-grid" id="coursesGrid"></div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="section section-soft" id="pricing">
+<div class="container">
+<div class="section-head">
+<span class="section-tag">Pricing</span>
+<h2>Simple plans</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px;margin:0 auto">
+<div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center">
+<h3 style="font-size:20px;font-weight:800">Starter</h3>
+<div style="font-size:36px;font-weight:800;margin:16px 0">Free</div>
+<button class="btn btn-ghost btn-full" onclick="openAuth()">Sign Up Free</button>
+</div>
+<div style="background:#fff;border:2px solid var(--primary);border-radius:16px;padding:32px;text-align:center;position:relative">
+<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700">POPULAR</div>
+<h3 style="font-size:20px;font-weight:800">Pro Student</h3>
+<div style="font-size:36px;font-weight:800;margin:16px 0">1,200 <span style="font-size:14px">EGP</span></div>
+<button class="btn btn-primary btn-full" onclick="showPaymentInfo()">Enroll Now</button>
+</div>
+<div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center">
+<h3 style="font-size:20px;font-weight:800">Teacher</h3>
+<div style="font-size:36px;font-weight:800;margin:16px 0">Free</div>
+<button class="btn btn-teacher btn-full" onclick="openTeacherApply()">Apply Now</button>
+</div>
+</div>
+</div>
+</section>
+
+<footer style="background:#0a1e3f;color:rgba(255,255,255,.7);padding:40px 0;text-align:center">
+<div class="container">
+<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:8px">EST Academy</div>
+<p style="font-size:13px">© 2026 EST Academy. All rights reserved.</p>
+</div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+<div class="modal modal-lg">
+<button class="modal-close" onclick="closeModal('authModal')">✕</button>
+<h3>Welcome to EST Academy</h3>
+<p>Sign in or create your account.</p>
+<div class="tabs">
+<button class="tab active" onclick="switchAuthTab('signin',event)">Sign In</button>
+<button class="tab" onclick="switchAuthTab('register',event)">Register</button>
+</div>
+
+<!-- SIGN IN -->
+<div id="signinPane">
+<form onsubmit="handleSignIn(event)">
+<div class="form-group"><label>Email or Username</label><input type="text" id="signInId" required></div>
+<div class="form-group"><label>Password</label><input type="password" id="signInPw" required></div>
+<button type="submit" class="btn btn-primary btn-full btn-lg" id="signInSubmitBtn">Sign In →</button>
+</form>
+<p style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-soft)">Admin demo: <strong>admin</strong> / <strong>admin123</strong></p>
+</div>
+
+<!-- REGISTER -->
+<div id="registerPane" class="hidden">
+<form onsubmit="handleRegister(event)">
+<div class="form-row">
+<div class="form-group"><label>Full Name *</label><input type="text" id="regName" required></div>
+<div class="form-group"><label>Username *</label><input type="text" id="regUsername" required></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Email *</label><input type="email" id="regEmail" required></div>
+<div class="form-group"><label>Password *</label><input type="password" id="regPassword" required minlength="6"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Grade *</label><select id="regGrade" required><option value="">Select</option><option>10</option><option>11</option><option>12</option></select></div>
+<div class="form-group"><label>Subject *</label><select id="regSubject" required><option value="">Select</option><option>Math</option><option>English</option><option>Biology</option><option>Chemistry</option><option>Logic</option></select></div>
+</div>
+<div class="form-group"><label>Choose Teacher *</label><select id="regTeacher" required><option value="">Loading teachers...</option></select></div>
+<div class="form-row">
+<div class="form-group"><label>Student Number *</label><input type="text" id="regStudentNumber" required></div>
+<div class="form-group"><label>Parent Phone *</label><input type="tel" id="regParentNumber" required></div>
+</div>
+<button type="submit" class="btn btn-primary btn-full btn-lg" style="background:var(--teacher)" id="registerSubmitBtn">Create Account →</button>
+<p style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-soft)">Your teacher will approve your account.</p>
+</form>
+</div>
+</div>
+</div>
+
+<!-- TEACHER APPLY MODAL -->
+<div class="modal-overlay" id="teacherModal">
+<div class="modal">
+<button class="modal-close" onclick="closeModal('teacherModal')">✕</button>
+<h3>👨‍🏫 Apply as Teacher</h3>
+<p>Fill in your details to join.</p>
+<form onsubmit="handleTeacherApply(event)">
+<div class="form-row">
+<div class="form-group"><label>Full Name *</label><input type="text" id="tName" required></div>
+<div class="form-group"><label>Email *</label><input type="email" id="tEmail" required></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Password *</label><input type="password" id="tPassword" required minlength="6"></div>
+<div class="form-group"><label>Subject *</label><select id="tSubject" required><option>Mathematics</option><option>English</option><option>Biology</option><option>Chemistry</option><option>Logic</option></select></div>
+</div>
+<button type="submit" class="btn btn-teacher btn-full btn-lg" id="teacherSubmitBtn">Submit Application →</button>
+</form>
+</div>
+</div>
+
+<!-- PAYMENT INFO MODAL -->
+<div class="modal-overlay" id="paymentModal">
+<div class="modal">
+<button class="modal-close" onclick="closeModal('paymentModal')">✕</button>
+<h3>💳 Complete Your Enrollment</h3>
+<p>Send payment using any method below:</p>
+<div style="padding:16px;background:var(--bg-soft);border-radius:12px;margin-bottom:16px;white-space:pre-line;font-size:14px;line-height:1.8" id="paymentDetails">Loading...</div>
+<div style="padding:14px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;font-size:13px;line-height:1.7;margin-bottom:16px">
+<strong>📸 After payment:</strong><br>
+Send screenshot to <strong id="contactEmailDisplay">...</strong><br>
+WhatsApp: <strong id="whatsappDisplay">...</strong>
+</div>
+<button class="btn btn-success btn-full btn-lg" onclick="copyPayment()">📋 Copy Payment Info</button>
+</div>
+</div>
+
+<!-- STUDENT DASHBOARD -->
+<div class="dashboard" id="studentDash">
+<div class="dash-header student">
+<h2>🎓 Student Dashboard</h2>
+<div class="dash-actions">
+<span id="studentGreeting" style="font-size:13px;opacity:.9"></span>
+<button onclick="logout()">Sign Out</button>
+<button onclick="closeDash('studentDash')">Close</button>
+</div>
+</div>
+<div class="dash-body">
+<div class="stats-grid">
+<div class="stat"><div class="stat-icon">📚</div><div><div class="stat-val" id="sCourses">0</div><div class="stat-lbl">Courses</div></div></div>
+<div class="stat"><div class="stat-icon">📝</div><div><div class="stat-val" id="sExams">0</div><div class="stat-lbl">Exams</div></div></div>
+<div class="stat"><div class="stat-icon">📊</div><div><div class="stat-val" id="sAvg">0%</div><div class="stat-lbl">Average</div></div></div>
+<div class="stat"><div class="stat-icon">🏆</div><div><div class="stat-val" id="sBadges">0</div><div class="stat-lbl">Badges</div></div></div>
+</div>
+<div id="studentBanner"></div>
+<div class="panel">
+<h3>📚 My Courses</h3>
+<div class="cards-grid" id="studentCoursesGrid"></div>
+</div>
+</div>
+</div>
+
+<!-- TEACHER DASHBOARD -->
+<div class="dashboard" id="teacherDash">
+<div class="dash-header teacher">
+<h2>👨‍🏫 Teacher Dashboard</h2>
+<div class="dash-actions">
+<span id="teacherGreeting" style="font-size:13px;opacity:.9"></span>
+<button onclick="logout()">Sign Out</button>
+<button onclick="closeDash('teacherDash')">Close</button>
+</div>
+</div>
+<div class="dash-body">
+<div class="stats-grid">
+<div class="stat"><div class="stat-icon teacher">👥</div><div><div class="stat-val" id="tStudents">0</div><div class="stat-lbl">Students</div></div></div>
+<div class="stat"><div class="stat-icon teacher">⏳</div><div><div class="stat-val" id="tPending">0</div><div class="stat-lbl">Pending</div></div></div>
+<div class="stat"><div class="stat-icon teacher">❓</div><div><div class="stat-val" id="tQuestions">0</div><div class="stat-lbl">Questions</div></div></div>
+<div class="stat"><div class="stat-icon teacher">📝</div><div><div class="stat-val" id="tExams">0</div><div class="stat-lbl">Exams</div></div></div>
+</div>
+<div class="dash-tabs">
+<button class="dash-tab active" onclick="switchPane('teacherDash','pending',event)">⏳ Pending</button>
+<button class="dash-tab" onclick="switchPane('teacherDash','students',event)">👥 Students</button>
+</div>
+<div class="dash-pane active" id="teacherDash-pending">
+<div class="panel"><h3>⏳ Pending Student Requests</h3><div class="cards-grid" id="teacherPendingGrid"></div></div>
+</div>
+<div class="dash-pane" id="teacherDash-students">
+<div class="panel"><h3>👥 Approved Students</h3><div class="cards-grid" id="teacherStudentsGrid"></div></div>
+</div>
+</div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="dashboard" id="adminDash">
+<div class="dash-header admin">
+<h2>⚙️ Admin Dashboard</h2>
+<div class="dash-actions">
+<span id="adminGreeting" style="font-size:13px;opacity:.9"></span>
+<button onclick="logout()">Sign Out</button>
+<button onclick="closeDash('adminDash')">Close</button>
+</div>
+</div>
+<div class="dash-body">
+<div class="stats-grid">
+<div class="stat"><div class="stat-icon admin">🎓</div><div><div class="stat-val" id="aStudents">0</div><div class="stat-lbl">Students</div></div></div>
+<div class="stat"><div class="stat-icon admin">⏳</div><div><div class="stat-val" id="aPending">0</div><div class="stat-lbl">Pending</div></div></div>
+<div class="stat"><div class="stat-icon admin">👨‍🏫</div><div><div class="stat-val" id="aTeachers">0</div><div class="stat-lbl">Teachers</div></div></div>
+<div class="stat"><div class="stat-icon admin">💰</div><div><div class="stat-val" id="aRevenue">0</div><div class="stat-lbl">Revenue EGP</div></div></div>
+</div>
+<div class="dash-tabs">
+<button class="dash-tab active" onclick="switchPane('adminDash','pending',event)">⏳ Pending</button>
+<button class="dash-tab" onclick="switchPane('adminDash','payments',event)">💰 Manual Payments</button>
+<button class="dash-tab" onclick="switchPane('adminDash','students',event)">🎓 All Students</button>
+<button class="dash-tab" onclick="switchPane('adminDash','teachers',event)">👨‍🏫 Teachers</button>
+<button class="dash-tab" onclick="switchPane('adminDash','settings',event)">⚙️ Settings</button>
+</div>
+<div class="dash-pane active" id="adminDash-pending">
+<div class="panel"><h3>⏳ Pending Registrations</h3><div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Username</th><th>Grade</th><th>Subject</th><th>Teacher</th><th>Student #</th><th>Parent #</th><th>Actions</th></tr></thead><tbody id="adminPendingTable"></tbody></table></div></div>
+</div>
+<div class="dash-pane" id="adminDash-payments">
+<div class="panel"><h3>💰 Confirm Payments</h3><p style="font-size:13px;color:var(--text-soft);margin-bottom:16px">When a student pays you, mark them paid here.</p><div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Username</th><th>Subject</th><th>Plan</th><th>Action</th></tr></thead><tbody id="adminPaymentsTable"></tbody></table></div></div>
+</div>
+<div class="dash-pane" id="adminDash-students">
+<div class="panel"><h3>🎓 All Students</h3><div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Username</th><th>Grade</th><th>Teacher</th><th>Status</th><th>Plan</th><th>Actions</th></tr></thead><tbody id="adminStudentsTable"></tbody></table></div></div>
+</div>
+<div class="dash-pane" id="adminDash-teachers">
+<div class="panel"><h3>👨‍🏫 Teachers</h3><div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Students</th></tr></thead><tbody id="adminTeachersTable"></tbody></table></div></div>
+</div>
+<div class="dash-pane" id="adminDash-settings">
+<div class="panel">
+<h3>⚙️ Platform Settings</h3>
+<div class="form-group"><label>Payment Info (shown to students)</label><textarea id="setPaymentInfo" style="min-height:140px"></textarea></div>
+<div class="form-row">
+<div class="form-group"><label>Contact Email</label><input type="email" id="setEmail"></div>
+<div class="form-group"><label>WhatsApp Number</label><input type="tel" id="setWhatsapp"></div>
+</div>
+<button class="btn btn-admin btn-full btn-lg" onclick="saveSettings()">💾 Save Settings</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// SUPABASE CREDENTIALS
+// ============================================================
+const SUPABASE_URL = 'https://mllgitbtlloxfnoooqqr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_WRWogXQmJMLE2vl2N7DR2w_WOO_AmJT';
+
+// Check credentials
+if (SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+  document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;text-align:center"><h1>⚠️ Setup Required</h1><p style="margin-top:20px">Open this file in a text editor and replace the placeholder values:</p><pre style="background:#f5f5f5;padding:20px;border-radius:10px;text-align:left;max-width:600px;margin:20px auto">const SUPABASE_URL = \'YOUR_SUPABASE_URL_HERE\';<br>const SUPABASE_ANON_KEY = \'YOUR_SUPABASE_ANON_KEY_HERE\';</pre></div>';
+  throw new Error('Supabase credentials not set');
+}
+
+// Initialize
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ============================================================
+// DATA CACHE
+// ============================================================
+const DB = {
+  teachers: [],
+  students: [],
+  payments: [],
+  prices: {math:1200, english:1200, biology:1000, chemistry:1000, logic:900, bundle:3200},
+  settings: {paymentInfo:'...', contactEmail:'...', whatsappNumber:'...'},
+  users: [{id:1, name:'Admin', username:'admin', email:'admin@estacademy.com', password:'admin123', role:'admin'}]
+};
+
+let currentUser = null;
+let currentTeacher = null;
+let currentStudent = null;
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+async function init() {
+  console.log('🚀 Initializing...');
+  await loadAllData();
+  renderCourses();
+  populateTeachersDropdown();
+  console.log('✅ Ready');
+}
+
+async function loadAllData() {
+  try {
+    const [tRes, sRes, pRes, setRes] = await Promise.all([
+      supabaseClient.from('teachers').select('*'),
+      supabaseClient.from('students').select('*').order('id', {ascending:false}),
+      supabaseClient.from('payments').select('*').order('id', {ascending:false}),
+      supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle()
+    ]);
+
+    if (tRes.error) console.error('Teachers error:', tRes.error);
+    if (sRes.error) console.error('Students error:', sRes.error);
+
+    DB.teachers = tRes.data || [];
+    DB.students = sRes.data || [];
+    DB.payments = pRes.data || [];
+    if (setRes.data) {
+      DB.settings = {
+        paymentInfo: setRes.data.payment_info || '',
+        contactEmail: setRes.data.contact_email || '',
+        whatsappNumber: setRes.data.whatsapp_number || ''
+      };
+    }
+
+    console.log('✅ Loaded:', {
+      teachers: DB.teachers.length,
+      students: DB.students.length,
+      payments: DB.payments.length
+    });
+  } catch (err) {
+    console.error('Load error:', err);
+    showToast('⚠️ Could not load data');
+  }
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function closeDash(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function switchPane(dashId, paneName, event) {
+  const dash = document.getElementById(dashId);
+  dash.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  if (event) event.target.classList.add('active');
+  dash.querySelectorAll('.dash-pane').forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById(dashId + '-' + paneName);
+  if (pane) pane.classList.add('active');
+}
+
+function switchAuthTab(tab, event) {
+  document.querySelectorAll('#authModal .tab').forEach(t => t.classList.remove('active'));
+  if (event) event.target.classList.add('active');
+  document.getElementById('signinPane').classList.toggle('hidden', tab !== 'signin');
+  document.getElementById('registerPane').classList.toggle('hidden', tab !== 'register');
+}
+
+// ============================================================
+// COURSES
+// ============================================================
+function renderCourses() {
+  const grid = document.getElementById('coursesGrid');
+  if (!grid) return;
+  const courses = [
+    {id:'math', title:'EST Math', icon:'📐', theme:'math', desc:'Algebra, geometry, functions.'},
+    {id:'english', title:'EST English', icon:'📖', theme:'english', desc:'Reading, grammar, essays.'},
+    {id:'biology', title:'EST Biology', icon:'🧬', theme:'science', desc:'Cell biology, genetics.'},
+    {id:'chemistry', title:'EST Chemistry', icon:'⚗️', theme:'science', desc:'Atomic structure, reactions.'},
+    {id:'logic', title:'EST Logic', icon:'🧩', theme:'logic', desc:'Critical reasoning.'},
+    {id:'bundle', title:'Full Bundle', icon:'🎓', theme:'math', desc:'All subjects.'}
+  ];
+  grid.innerHTML = courses.map(c => `
+    <div class="course" onclick="showPaymentInfo()">
+      <div class="course-cover ${c.theme}">
+        <span class="course-icon">${c.icon}</span>
+        <h3>${c.title}</h3>
+      </div>
+      <div class="course-body">
+        <p class="course-desc">${c.desc}</p>
+        <div class="course-meta">
+          <span class="course-price">${DB.prices[c.id] || 1200} EGP</span>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();showPaymentInfo()">Enroll</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function populateTeachersDropdown() {
+  const sel = document.getElementById('regTeacher');
+  if (!sel) return;
+  const approved = DB.teachers.filter(t => t.status === 'approved');
+  sel.innerHTML = '<option value="">Select teacher</option>' +
+    approved.map(t => `<option value="${t.id}">${t.name} — ${t.subject}</option>`).join('');
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function openAuth() {
+  openModal('authModal');
+}
+
+async function handleSignIn(e) {
+  e.preventDefault();
+  const btn = document.getElementById('signInSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+
+  const id = document.getElementById('signInId').value.trim();
+  const pw = document.getElementById('signInPw').value;
+
+  // Admin (local)
+  const admin = DB.users.find(u => u.role === 'admin' && (u.email === id || u.username === id) && u.password === pw);
+  if (admin) {
+    currentUser = admin;
+    closeModal('authModal');
+    showToast('⚙️ Welcome Admin!');
+    setTimeout(openAdminDash, 200);
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    return;
+  }
+
+  // Teacher
+  const teacher = DB.teachers.find(t => (t.email === id || t.username === id) && t.password === pw);
+  if (teacher) {
+    currentTeacher = teacher;
+    closeModal('authModal');
+    showToast('👨‍🏫 Welcome ' + teacher.name + '!');
+    setTimeout(openTeacherDash, 200);
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    return;
+  }
+
+  // Student
+  const student = DB.students.find(s => (s.email === id || s.username === id) && s.password === pw);
+  if (student) {
+    currentStudent = student;
+    closeModal('authModal');
+    showToast('🎓 Welcome ' + student.name + '!');
+    setTimeout(openStudentDash, 200);
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    return;
+  }
+
+  showToast('❌ Invalid credentials');
+  btn.disabled = false;
+  btn.textContent = 'Sign In →';
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('registerSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+
+  const data = {
+    name: document.getElementById('regName').value.trim(),
+    username: document.getElementById('regUsername').value.trim(),
+    email: document.getElementById('regEmail').value.trim(),
+    password: document.getElementById('regPassword').value,
+    grade: document.getElementById('regGrade').value,
+    subject: document.getElementById('regSubject').value,
+    teacher_id: parseInt(document.getElementById('regTeacher').value),
+    student_number: document.getElementById('regStudentNumber').value.trim(),
+    parent_number: document.getElementById('regParentNumber').value.trim(),
+    status: 'pending',
+    plan: 'free'
+  };
+
+  // Check duplicates
+  if (DB.students.find(s => s.email === data.email)) {
+    showToast('❌ Email already registered');
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+    return;
+  }
+
+  const { data: result, error } = await supabaseClient.from('students').insert([data]).select().single();
+
+  if (error) {
+    console.error('Register error:', error);
+    showToast('❌ ' + error.message);
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+    return;
+  }
+
+  DB.students.unshift(result);
+  currentStudent = result;
+  closeModal('authModal');
+  showToast('🎉 Registered! Waiting for approval.');
+  btn.disabled = false;
+  btn.textContent = 'Create Account →';
+  setTimeout(openStudentDash, 300);
+}
+
+function openTeacherApply() {
+  openModal('teacherModal');
+}
+
+async function handleTeacherApply(e) {
+  e.preventDefault();
+  const btn = document.getElementById('teacherSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const data = {
+    name: document.getElementById('tName').value.trim(),
+    email: document.getElementById('tEmail').value.trim(),
+    password: document.getElementById('tPassword').value,
+    subject: document.getElementById('tSubject').value,
+    status: 'approved',
+    earnings: 0,
+    rating: 5.0
+  };
+
+  if (DB.teachers.find(t => t.email === data.email)) {
+    showToast('❌ Email already registered');
+    btn.disabled = false;
+    btn.textContent = 'Submit Application →';
+    return;
+  }
+
+  const { data: result, error } = await supabaseClient.from('teachers').insert([data]).select().single();
+
+  if (error) {
+    showToast('❌ ' + error.message);
+    btn.disabled = false;
+    btn.textContent = 'Submit Application →';
+    return;
+  }
+
+  DB.teachers.push(result);
+  closeModal('teacherModal');
+  showToast('✅ Application submitted! You can now sign in.');
+  populateTeachersDropdown();
+  btn.disabled = false;
+  btn.textContent = 'Submit Application →';
+}
+
+function logout() {
+  currentUser = null;
+  currentTeacher = null;
+  currentStudent = null;
+  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+  document.body.style.overflow = '';
+  showToast('👋 Signed out');
+}
+
+// ============================================================
+// STUDENT DASHBOARD
+// ============================================================
+function openStudentDash() {
+  if (!currentStudent) return;
+  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+  document.getElementById('studentDash').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('studentGreeting').textContent = currentStudent.name;
+  document.getElementById('sCourses').textContent = currentStudent.plan === 'pro' ? '4' : '0';
+  document.getElementById('sExams').textContent = '0';
+  document.getElementById('sAvg').textContent = (currentStudent.progress || 0) + '%';
+  document.getElementById('sBadges').textContent = '0';
+
+  // Status banner
+  const banner = document.getElementById('studentBanner');
+  if (currentStudent.status === 'pending') {
+    banner.innerHTML = '<div style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;border-radius:14px;padding:20px;margin-bottom:20px;display:flex;gap:14px;align-items:center"><div style="font-size:32px">⏳</div><div><div style="font-weight:700;font-size:15px">Waiting for Approval</div><div style="font-size:13px;opacity:.95">Your teacher will review your registration soon.</div></div></div>';
+  } else if (currentStudent.status === 'declined') {
+    banner.innerHTML = '<div style="background:linear-gradient(135deg,#ef4444,#f87171);color:#fff;border-radius:14px;padding:20px;margin-bottom:20px"><strong>❌ Registration Declined</strong><br><span style="font-size:13px">Please contact support.</span></div>';
+  } else {
+    banner.innerHTML = '';
+  }
+
+  // Courses
+  const courses = [
+    {title:'EST Math', icon:'📐', key:'math'},
+    {title:'EST English', icon:'📖', key:'english'},
+    {title:'EST Biology', icon:'🧬', key:'biology'},
+    {title:'EST Logic', icon:'🧩', key:'logic'}
+  ];
+  document.getElementById('studentCoursesGrid').innerHTML = courses.map(c => {
+    const hasAccess = currentStudent.plan === 'pro';
+    return `
+      <div class="person-card">
+        <div style="font-size:36px;margin-bottom:12px">${c.icon}</div>
+        <h4>${c.title}</h4>
+        <div class="meta">${hasAccess ? '✅ Full Access' : '🔒 ' + (DB.prices[c.key]||1200) + ' EGP'}</div>
+        ${!hasAccess ? `<button class="btn btn-primary btn-sm btn-full" onclick="showPaymentInfo()">Enroll</button>` : `<button class="btn btn-primary btn-sm btn-full">Continue →</button>`}
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// TEACHER DASHBOARD
+// ============================================================
+function openTeacherDash() {
+  if (!currentTeacher) return;
+  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+  document.getElementById('teacherDash').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  renderTeacherDashboard();
+}
+
+function renderTeacherDashboard() {
+  if (!currentTeacher) return;
+  document.getElementById('teacherGreeting').textContent = currentTeacher.name;
+
+  const myStudents = DB.students.filter(s => s.teacher_id === currentTeacher.id);
+  const approved = myStudents.filter(s => s.status === 'approved');
+  const pending = myStudents.filter(s => s.status === 'pending');
+
+  document.getElementById('tStudents').textContent = approved.length;
+  document.getElementById('tPending').textContent = pending.length;
+  document.getElementById('tQuestions').textContent = '0';
+  document.getElementById('tExams').textContent = '0';
+
+  // Pending grid
+  const pg = document.getElementById('teacherPendingGrid');
+  if (pending.length === 0) {
+    pg.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-soft)">No pending requests ✨</p>';
+  } else {
+    pg.innerHTML = pending.map(s => {
+      const ini = s.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+      return `
+        <div class="person-card pending">
+          <div class="avatar pending">${ini}</div>
+          <h4>${s.name}</h4>
+          <div class="meta">${s.email}</div>
+          <div style="font-size:12px;color:var(--text-soft);line-height:1.8">
+            <div><strong>Grade:</strong> ${s.grade}</div>
+            <div><strong>Subject:</strong> ${s.subject}</div>
+            <div><strong>Student #:</strong> ${s.student_number || '-'}</div>
+            <div><strong>Parent #:</strong> ${s.parent_number || '-'}</div>
+          </div>
+          <div class="card-actions">
+            <button class="accept" onclick="acceptStudent(${s.id})">✓ Accept</button>
+            <button class="decline" onclick="declineStudent(${s.id})">✕ Decline</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Approved grid
+  const ag = document.getElementById('teacherStudentsGrid');
+  if (approved.length === 0) {
+    ag.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-soft)">No approved students yet</p>';
+  } else {
+    ag.innerHTML = approved.map(s => {
+      const ini = s.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+      return `
+        <div class="person-card teacher">
+          <div class="avatar teacher">${ini}</div>
+          <h4>${s.name}</h4>
+          <div class="meta">${s.email}</div>
+          <div style="font-size:12px;color:var(--text-soft)">Grade: ${s.grade} · Plan: <span class="badge ${s.plan}">${s.plan}</span></div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+async function acceptStudent(id) {
+  const { error } = await supabaseClient.from('students').update({status:'approved'}).eq('id', id);
+  if (error) { showToast('❌ ' + error.message); return; }
+  const s = DB.students.find(x => x.id === id);
+  if (s) s.status = 'approved';
+  renderTeacherDashboard();
+  showToast('✅ Student accepted!');
+}
+
+async function declineStudent(id) {
+  if (!confirm('Decline this student?')) return;
+  const { error } = await supabaseClient.from('students').update({status:'declined'}).eq('id', id);
+  if (error) { showToast('❌ ' + error.message); return; }
+  const s = DB.students.find(x => x.id === id);
+  if (s) s.status = 'declined';
+  renderTeacherDashboard();
+  showToast('❌ Declined');
+}
+
+// ============================================================
+// ADMIN DASHBOARD
+// ============================================================
+function openAdminDash() {
+  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+  document.getElementById('adminDash').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  renderAdminDashboard();
+}
+
+function renderAdminDashboard() {
+  document.getElementById('adminGreeting').textContent = currentUser ? currentUser.name : 'Admin';
+
+  const pending = DB.students.filter(s => s.status === 'pending');
+  const approved = DB.students.filter(s => s.status === 'approved');
+  const revenue = DB.payments.filter(p => p.status === 'paid').reduce((sum, p) => sum + (p.amount || 0), 0);
+
+  document.getElementById('aStudents').textContent = approved.length;
+  document.getElementById('aPending').textContent = pending.length;
+  document.getElementById('aTeachers').textContent = DB.teachers.length;
+  document.getElementById('aRevenue').textContent = revenue.toLocaleString();
+
+  // Pending table
+  const pt = document.getElementById('adminPendingTable');
+  if (pending.length === 0) {
+    pt.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-soft)">No pending registrations</td></tr>';
+  } else {
+    pt.innerHTML = pending.map(s => {
+      const teacher = DB.teachers.find(t => t.id === s.teacher_id);
+      return `<tr>
+        <td>${s.name}</td>
+        <td>${s.username}</td>
+        <td>${s.grade}</td>
+        <td>${s.subject}</td>
+        <td>${teacher ? teacher.name : '-'}</td>
+        <td>${s.student_number || '-'}</td>
+        <td>${s.parent_number || '-'}</td>
+        <td>
+          <button class="btn btn-success btn-sm" onclick="adminApprove(${s.id})">✅</button>
+          <button class="btn btn-danger btn-sm" onclick="adminDecline(${s.id})">❌</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Payments table
+  const payt = document.getElementById('adminPaymentsTable');
+  if (approved.length === 0) {
+    payt.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-soft)">No approved students</td></tr>';
+  } else {
+    payt.innerHTML = approved.map(s => {
+      const isPaid = s.plan === 'pro';
+      return `<tr>
+        <td>${s.name}</td>
+        <td>${s.username}</td>
+        <td>${s.subject}</td>
+        <td><span class="badge ${isPaid ? 'pro' : 'free'}">${isPaid ? 'Paid ✓' : 'Free'}</span></td>
+        <td>
+          ${!isPaid 
+            ? `<button class="btn btn-success btn-sm" onclick="markPaid(${s.id})">💰 Mark Paid</button>`
+            : `<button class="btn btn-ghost btn-sm" onclick="markUnpaid(${s.id})">↩️ Undo</button>`}
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Students table
+  const st = document.getElementById('adminStudentsTable');
+  if (DB.students.length === 0) {
+    st.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-soft)">No students yet</td></tr>';
+  } else {
+    st.innerHTML = DB.students.map(s => {
+      const teacher = DB.teachers.find(t => t.id === s.teacher_id);
+      return `<tr>
+        <td>${s.name}</td>
+        <td>${s.username}</td>
+        <td>${s.grade}</td>
+        <td>${teacher ? teacher.name : '-'}</td>
+        <td><span class="badge ${s.status}">${s.status}</span></td>
+        <td><span class="badge ${s.plan}">${s.plan}</span></td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.id})">🗑️</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Teachers table
+  const tt = document.getElementById('adminTeachersTable');
+  tt.innerHTML = DB.teachers.length === 0
+    ? '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-soft)">No teachers yet</td></tr>'
+    : DB.teachers.map(t => {
+      const cnt = DB.students.filter(s => s.teacher_id === t.id && s.status === 'approved').length;
+      return `<tr><td>${t.name}</td><td>${t.email}</td><td>${t.subject}</td><td>${cnt}</td></tr>`;
+    }).join('');
+
+  // Settings
+  document.getElementById('setPaymentInfo').value = DB.settings.paymentInfo;
+  document.getElementById('setEmail').value = DB.settings.contactEmail;
+  document.getElementById('setWhatsapp').value = DB.settings.whatsappNumber;
+}
+
+async function adminApprove(id) {
+  const { error } = await supabaseClient.from('students').update({status:'approved'}).eq('id', id);
+  if (error) { showToast('❌ ' + error.message); return; }
+  const s = DB.students.find(x => x.id === id);
+  if (s) s.status = 'approved';
+  renderAdminDashboard();
+  showToast('✅ Approved!');
+}
+
+async function adminDecline(id) {
+  if (!confirm('Decline?')) return;
+  const { error } = await supabaseClient.from('students').update({status:'declined'}).eq('id', id);
+  if (error) { showToast('❌ ' + error.message); return; }
+  const s = DB.students.find(x => x.id === id);
+  if (s) s.status = 'declined';
+  renderAdminDashboard();
+  showToast('❌ Declined');
+}
+
+async function markPaid(id) {
+  if (!confirm('Mark student as paid?')) return;
+  const s = DB.students.find(x => x.id === id);
+  if (!s) return;
+  const amount = DB.prices[s.subject?.toLowerCase()] || 1200;
+
+  await supabaseClient.from('students').update({plan:'pro'}).eq('id', id);
+  const { data: payData } = await supabaseClient.from('payments').insert([{
+    student_id: s.id,
+    customer: s.name,
+    amount,
+    method: 'Manual',
+    status: 'paid'
+  }]).select().single();
+
+  s.plan = 'pro';
+  if (payData) DB.payments.unshift(payData);
+  renderAdminDashboard();
+  showToast('💰 Marked as paid!');
+}
+
+async function markUnpaid(id) {
+  if (!confirm('Remove payment?')) return;
+  await supabaseClient.from('students').update({plan:'free'}).eq('id', id);
+  const s = DB.students.find(x => x.id === id);
+  if (s) s.plan = 'free';
+  renderAdminDashboard();
+  showToast('↩️ Removed');
+}
+
+async function deleteStudent(id) {
+  if (!confirm('Delete?')) return;
+  await supabaseClient.from('students').delete().eq('id', id);
+  DB.students = DB.students.filter(s => s.id !== id);
+  renderAdminDashboard();
+  showToast('🗑️ Deleted');
+}
+
+async function saveSettings() {
+  const info = document.getElementById('setPaymentInfo').value;
+  const email = document.getElementById('setEmail').value;
+  const wa = document.getElementById('setWhatsapp').value;
+
+  const { error } = await supabaseClient.from('settings').update({
+    payment_info: info,
+    contact_email: email,
+    whatsapp_number: wa
+  }).eq('id', 1);
+
+  if (error) { showToast('❌ ' + error.message); return; }
+  DB.settings = {paymentInfo: info, contactEmail: email, whatsappNumber: wa};
+  showToast('💾 Settings saved!');
+}
+
+// ============================================================
+// PAYMENT INFO
+// ============================================================
+function showPaymentInfo() {
+  document.getElementById('paymentDetails').textContent = DB.settings.paymentInfo || 'Payment info not configured yet.';
+  document.getElementById('contactEmailDisplay').textContent = DB.settings.contactEmail || '-';
+  document.getElementById('whatsappDisplay').textContent = DB.settings.whatsappNumber || '-';
+  openModal('paymentModal');
+}
+
+function copyPayment() {
+  const text = `EST Academy Payment:\n\n${DB.settings.paymentInfo}\n\nAfter payment:\nEmail: ${DB.settings.contactEmail}\nWhatsApp: ${DB.settings.whatsappNumber}`;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Copied!'));
+}
+
+// ============================================================
+// START
+// ============================================================
+init();
+</script>
+</body>
+</html>
